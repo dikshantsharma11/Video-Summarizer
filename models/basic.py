@@ -1,10 +1,10 @@
-import cv2
+from cv2 import cv2
 import os
 import pandas as pd
 import numpy as np
 import imutils
-
-
+import ffmpy
+from ffmpy import FFmpeg
 def FrameExtract(path,reso): 
       
     vidObj = cv2.VideoCapture(path) 
@@ -59,7 +59,7 @@ def impPt(frame,fps):
 
 def genImpVid(video_name, images, height, width, color, fps):
     writer = cv2.VideoWriter(video_name, cv2.VideoWriter_fourcc(
-        *'MP4V'), fps, (width, height), color)
+        *'mp4v'), fps, (width, height), color)
     for i in images:
         writer.write(i)
 
@@ -70,4 +70,7 @@ def main(vid_file):
     g_frames,fps,height,width = FrameExtract(vid_file,500)
     frame_nos,impFrams = impPt(g_frames,fps)
 
-    return genImpVid("static/video/output/og.mp4",impFrams,height,width,True,fps)
+    genImpVid("static/video/output/og.mp4",impFrams,height,width,True,fps)
+    ff = FFmpeg(inputs={'static/video/output/og.mp4': None}, outputs={'static/video/output/output.mp4':'-c:v h264 -c:a ac3'})
+    ff.run()
+    os.remove("static/video/output/og.mp4")
