@@ -8,7 +8,7 @@ app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 50*1024*1024  # upload limit 50MB
 
-fiename1=""
+#fiename1=""
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
 def index():
@@ -23,15 +23,15 @@ def index():
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             basic.main(os.path.join(
                 app.config['UPLOAD_FOLDER'], filename))
-            filename1=filename
+            #filename1=filename
             return redirect(url_for('processed'))
     return render_template('index.html')
 
 
 @app.route('/out')
 def processed():
-    global filename1
-    os.remove(os.path.join(app.config['UPLOAD_FOLDER'], filename1))
+    #global filename1
+    #os.remove(os.path.join(app.config['UPLOAD_FOLDER'], filename1))
     return render_template('video.html')
 
 
