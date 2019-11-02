@@ -63,24 +63,29 @@ def impPt(frame,fps):
                 (x, y, w, h) = cv2.boundingRect(cnt)
 
         if maxi > 1000:
+            (x, y, w, h) = cv2.boundingRect(cnt)
+            cv2.putText(frame[i], '%.2f' % text, (x, h), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), lineType=cv2.LINE_AA) 
             frame_nos.append(i)
             imp_frams.append(frame[i])
             timestamps.append(float(text))
             
     return frame_nos,imp_frams,timestamps
 
-
+def sizeDiff(inf, outf):
+    infs = os.path.getsize(inf)
+    outfs = os.path.getsize(outf)
+    return (infs >> 20), (outfs >> 20)
 
 def genImpVid(video_name, images, height, width, color, fps):
     writer = cv2.VideoWriter(video_name, cv2.VideoWriter_fourcc(*'mp4v'), fps, (width, height), color)
     for i in images:
         writer.write(i)
-
+        
 
 def main(vid_file):
     global og_frames, g_frames, fps, height, width, hist_arr, impFrams
 
-    g_frames,fps,height,width = FrameExtract(vid_file,500)
+    g_frames,fps,height,width = FrameExtract(vid_file,1280)
     frame_nos,impFrams,timestamps = impPt(g_frames,fps)
 
     genImpVid("static/video/output/og.mp4",impFrams,height,width,True,fps)
@@ -90,3 +95,5 @@ def main(vid_file):
     os.system(
         "yes | ffmpeg -i static/video/output/og.mp4 -vcodec libx264 static/video/output/output.mp4")
     os.remove("static/video/output/og.mp4")
+    
+    infilesize, outfilesize = sizeDiff("static/video/output/output.mp4",vid_file)
