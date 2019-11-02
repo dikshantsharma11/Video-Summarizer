@@ -61,7 +61,6 @@ def impPt(frame,fps):
             if maxi > 1000:
                 text = float(i/fps) 
                 (x, y, w, h) = cv2.boundingRect(cnt)
-                cv2.putText(frame[i], '%.2f' % text, (x, h), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), lineType=cv2.LINE_AA) 
 
         if maxi > 1000:
             frame_nos.append(i)
@@ -81,7 +80,7 @@ def genImpVid(video_name, images, height, width, color, fps):
 def main(vid_file):
     global og_frames, g_frames, fps, height, width, hist_arr, impFrams
 
-    g_frames,fps,height,width = FrameExtract(vid_file,1280)
+    g_frames,fps,height,width = FrameExtract(vid_file,500)
     frame_nos,impFrams,timestamps = impPt(g_frames,fps)
 
     genImpVid("static/video/output/og.mp4",impFrams,height,width,True,fps)
