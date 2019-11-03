@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- <meta http-equiv="X-UA-Compatible" content="ie=edge"> -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
     <title></title>
 
   </head>
@@ -43,20 +43,35 @@
         </ul>
     </div>
 </nav>
-<div class="input-group">
+<br>
+<br>
+<br>
+<div class="container">
+<form class="input-group" method="post" enctype="multipart/form-data">
+        <!-- <form method="post" enctype="multipart/form-data"> -->
         <div class="custom-file">
+          
           <input type="file" class="custom-file-input" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" name='file'>
           <label class="custom-file-label" for="inputGroupFile04">Choose file</label>
         </div>
         <div class="input-group-append">
-          <a class="btn btn-outline-secondary" id="inputGroupFileAddon04" href="/video">Button</a>
+          <button class="btn btn-outline-secondary" id="inputGroupFileAddon04" type="submit" >Button</button>
         </div>
-      </div>
-     <form method="post" enctype="multipart/form-data">
-      <input type="file" name='file'>
-      <input type="submit" value="Upload">
-    </form>
+      </form>
+    </div>
+    <br>
+  <center><h1>Demo</h1></center>
 
+<div style="display: flex; align-items:center;margin-left:105px;">
+<video width="560" height="400" autoplay loop >
+    <source src="static/video_display/vid.mp4" type="video/mp4">
+  </video>
+  <!-- <span> -->
+  <i class="fas fa-arrow-right fa-7x" style="margin-left: 50px;"></i><!-- </span> -->
+<video width="560" height="400" autoplay loop style="margin-left:50px;">
+    <source src="static/video_display/vid1.mp4" type="video/mp4">
+  </video>
+</div>
 
 
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>

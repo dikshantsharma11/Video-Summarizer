@@ -33,7 +33,7 @@ def FrameExtract(path,reso):
           gray_img = cv2.resize(image, (wi,hi), interpolation = cv2.INTER_AREA)
           # Saves the frames with frame-count 
           g_frame.append(gray_img)
-
+    vidObj.release() 
     return g_frame,fps,hi,wi
 
 def impPt(frame,fps):
