@@ -7,7 +7,7 @@
 
   <body><br>
     <p>original</p>
-    <video id='my-video' class='video-js' controls="controls" preload='auto' width='640' height='400' poster='' data-setup='{"playbackRates": [1, 1.5, 2]}'>
+    <video id='my-video' class='video-js vjs-big-play-centered' controls="controls" preload='auto' width='640' height='400' poster='' data-setup='{"playbackRates": [1, 1.5, 2]}'>
       <source src="/static/video/input/{{ filename }}" type="video/mp4">
       <p class='vjs-no-js'>
         To view this video please enable JavaScript, and consider upgrading to a web browser that
@@ -15,7 +15,7 @@
       </p>
     </video><br>
     <p>processed</p>
-    <video id='my-video' class='video-js' controls="controls" preload='auto' width='640' height='400' poster='' data-setup='{"playbackRates": [1, 1.5, 2]}'>
+    <video id='my-video' class='video-js vjs-big-play-centered' controls="controls" preload='auto' width='640' height='400' poster='' data-setup='{"playbackRates": [1, 1.5, 2]}'>
       <source src="/static/video/output/output.mp4" type="video/mp4">
       <p class='vjs-no-js'>
         To view this video please enable JavaScript, and consider upgrading to a web browser that
@@ -23,7 +23,7 @@
       </p>
     </video><br>
     <form>
-      <button type="submit" formaction="/download">Download(with timestamps)</button>
+      <button type="submit" formaction="/download">Download</button>
     </form>
     <script src='https://vjs.zencdn.net/7.6.5/video.js'></script>
   </body>
