@@ -71,10 +71,32 @@ def impPt(frame,fps):
             
     return frame_nos,imp_frams,timestamps
 
-def sizeDiff(inf, outf):
+def graph(inf, outf, fps):     #returns list- [input file size, output file size, in frames, out frames, in duration, out duration]
+    
+    graph_list = np.zeros(6)
+
     infs = os.path.getsize(inf)
     outfs = os.path.getsize(outf)
-    return (infs >> 20), (outfs >> 20)
+    graph_list[0] = ((infs >> 20))
+    graph_list[1] = ((outfs >> 20))
+
+    cap = cv2.VideoCapture(inf)
+    frame_count = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+    graph_list[2] = (frame_count)
+    duration = frame_count/fps
+    graph_list[4] = (duration)
+    cap.release()
+
+    
+    cap = cv2.VideoCapture(outf)
+    frame_count = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+    graph_list[3] = (frame_count)
+    duration = frame_count/fps
+    graph_list[5] = (duration)
+    cap.release()
+
+
+    return graph_list
 
 def genImpVid(video_name, images, height, width, color, fps):
     writer = cv2.VideoWriter(video_name, cv2.VideoWriter_fourcc(*'mp4v'), fps, (width, height), color)
@@ -85,7 +107,7 @@ def genImpVid(video_name, images, height, width, color, fps):
 def main(vid_file):
     global og_frames, g_frames, fps, height, width, hist_arr, impFrams
 
-    g_frames,fps,height,width = FrameExtract(vid_file,1280)
+    g_frames,fps,height,width = FrameExtract(vid_file,500)
     frame_nos,impFrams,timestamps = impPt(g_frames,fps)
 
     genImpVid("static/video/output/og.mp4",impFrams,height,width,True,fps)
@@ -96,4 +118,4 @@ def main(vid_file):
         "yes | ffmpeg -i static/video/output/og.mp4 -vcodec libx264 static/video/output/output.mp4")
     os.remove("static/video/output/og.mp4")
     
-    infilesize, outfilesize = sizeDiff("static/video/output/output.mp4",vid_file)
+    graph_list = graph("static/video/output/output.mp4", fps)
