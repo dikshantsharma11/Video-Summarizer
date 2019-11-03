@@ -11,8 +11,10 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['MAX_CONTENT_LENGTH'] = 50*1024*1024  # upload limit 50MB
 
 
-@app.route('/', methods=['GET', 'POST'])
-@app.route('/index', methods=['GET', 'POST'])
+@app.route('/', methods=['GET'])
+def home():
+    return render_template('index.html')
+@app.route('/video', methods=['GET', 'POST'])
 def index():
     # global filename1
     if request.method == 'POST':
@@ -27,7 +29,7 @@ def index():
                 app.config['UPLOAD_FOLDER'], filename))
             # filename1=filename
             return redirect(url_for('processed',filename=filename))
-    return render_template('index.html')
+    return render_template('video_page.html')
 
 
 @app.route('/out/<filename>')

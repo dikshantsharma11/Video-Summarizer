@@ -89,9 +89,9 @@ def main(vid_file):
     g_frames,fps,height,width = FrameExtract(vid_file,1280)
     frame_nos,impFrams,timestamps = impPt(g_frames,fps)
 
-    genImpVid("static/video/output/output.mp4",impFrams,height,width,True,fps)
+    genImpVid("static/video/output/og.mp4",impFrams,height,width,True,fps)
     
     impTS = ImpTimestamp(timestamps,fps)
-    # ff = FFmpeg(inputs={'static/video/output/og.mp4': None}, outputs={'static/video/output/output.mp4':'-c:v h264 -c:a ac3'})
-    # ff.run()
-    # os.remove("static/video/output/og.mp4")
+    ff = FFmpeg(inputs={'static/video/output/og.mp4': None}, outputs={'static/video/output/output.mp4':'-c:v h264 -c:a ac3'})
+    ff.run()
+    os.remove("static/video/output/og.mp4")
