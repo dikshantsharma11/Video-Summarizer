@@ -4,6 +4,13 @@ import pandas as pd
 import numpy as np
 import imutils
 import ffmpy
+import matplotlib.pyplot as plt
+import numpy as np
+from models.AccidentsClassifier import AccidentsClassifier
+from PIL import Image
+
+from models.object_detection.utils import label_map_util
+from models.object_detection.utils import visualization_utils as vis_util
 
 def ImpTimestamp(timestamps,fps):
     
@@ -14,6 +21,33 @@ def ImpTimestamp(timestamps,fps):
         impTime.append(timestamps[i+1])
 
     return impTime
+
+def detectAccident(impFrams,frame_nos):
+    
+    PATH_TO_LABELS = '/home/magito/sp5/models/accidents.pbtxt'
+    NUM_CLASSES = 1
+
+    label_map = label_map_util.load_labelmap(PATH_TO_LABELS)
+    categories = label_map_util.convert_label_map_to_categories(label_map, max_num_classes=NUM_CLASSES, use_display_name=True)
+    category_index = label_map_util.create_category_index(categories)
+
+    li = []
+    mostimpfram = []
+    for i in range(0,len(impFrams),10):
+        img = np.array(impFrams[i])
+
+        x = AccidentsClassifier()
+
+        boxes, scores, classes, num = x.get_classification(img)
+        
+        if np.sum(scores)>1:
+            mostimpfram.append(frame_nos[i])
+            
+        vis_util.visualize_boxes_and_labels_on_image_array(img, np.squeeze(boxes), np.squeeze(classes).astype(np.int32), np.squeeze(scores), category_index, use_normalized_coordinates=True, line_thickness=2)
+
+        li.append(img)
+    
+    return li, mostimpfram
 
 def FrameExtract(path,reso): 
       
@@ -32,7 +66,10 @@ def FrameExtract(path,reso):
           gray_img = cv2.resize(image, (wi,hi), interpolation = cv2.INTER_AREA)
           # Saves the frames with frame-count 
           g_frame.append(gray_img)
-
+          image=0
+    
+    vidObj = 0
+    
     return g_frame,fps,hi,wi
 
 def impPt(frame,fps):
@@ -64,7 +101,7 @@ def impPt(frame,fps):
 
         if maxi > 1000:
             (x, y, w, h) = cv2.boundingRect(cnt)
-            cv2.putText(frame[i], '%.2f' % text, (x, h), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), lineType=cv2.LINE_AA) 
+            cv2.putText(frame[i], '%.2f' % text, (x, h), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), lineType=cv2.LINE_AA) 
             frame_nos.append(i)
             imp_frams.append(frame[i])
             timestamps.append(float(text))
@@ -107,8 +144,9 @@ def genImpVid(video_name, images, height, width, color, fps):
 def main(vid_file):
     global og_frames, g_frames, fps, height, width, hist_arr, impFrams
 
-    g_frames,fps,height,width = FrameExtract(vid_file,500)
+    g_frames,fps,height,width = FrameExtract(vid_file,720)
     frame_nos,impFrams,timestamps = impPt(g_frames,fps)
+    g_frames = 0
 
     genImpVid("static/video/output/og.mp4",impFrams,height,width,True,fps)
     
@@ -118,4 +156,11 @@ def main(vid_file):
         "yes | ffmpeg -i static/video/output/og.mp4 -vcodec libx264 static/video/output/output.mp4")
     os.remove("static/video/output/og.mp4")
     
-    graph_list = graph("static/video/output/output.mp4", fps)
+    graph_list = graph("static/video/output/output.mp4", vid_file, fps)
+    
+    acci, mostimpfram = detectAccident(impFrams, frame_nos)
+    impFrams = 0
+    genImpVid("static/video/output/acci.mp4",acci,height,width,True,fps/10)
+    acci = 0
+    
+    
