@@ -5,18 +5,14 @@ from models import basic
 
 UPLOAD_FOLDER = 'static/video/input/'
 app = Flask(__name__)
-app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['TEMPLATES_AUTO_RELOAD'] = True
 app.config['MAX_CONTENT_LENGTH'] = 50*1024*1024  # upload limit 50MB
+app.config['TEMPLATES_AUTO_RELOAD'] = True
 
 
-@app.route('/', methods=['GET'])
-def home():
-    return render_template('index.html')
-@app.route('/video', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
+@app.route('/index', methods=['GET', 'POST'])
 def index():
-    # global filename1
     if request.method == 'POST':
         if 'file' in request.files:
             file = request.files['file']
@@ -27,18 +23,21 @@ def index():
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             basic.main(os.path.join(
                 app.config['UPLOAD_FOLDER'], filename))
-            # filename1=filename
-            return redirect(url_for('processed',filename=filename))
-    return render_template('video_page.html')
+            return redirect(url_for('processed', filename=filename))
+    return render_template('index.html')
 
 
 @app.route('/out/<filename>')
 def processed(filename):
-    return render_template('video.html', filename=filename)
+    x = basic.graph("static/video/output/output.mp4",
+     os.path.join(app.config['UPLOAD_FOLDER'], filename), basic.fps)
+    return render_template('video-out.html', filename=filename,x=x)
+
 
 @app.route('/download')
 def download():
-    return send_file('static/video/output/output.mp4', as_attachment=True, attachment_filename='processed-video.mp4',cache_timeout=0)
+    return send_file('static/video/output/output.mp4', as_attachment=True, attachment_filename='processed-video.mp4', cache_timeout=0)
+
 
 
 if __name__ == '__main__':
